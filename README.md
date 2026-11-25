@@ -5,6 +5,7 @@
 </p>
 
 <p align="center">
+  <a href="https://pypi.org/project/ty-migrate/"><img src="https://img.shields.io/pypi/v/ty-migrate.svg?color=blue" alt="PyPI version"></a>
   <a href="https://github.com/Prateek-squadron/ty-migrate/actions/workflows/ci.yml"><img src="https://github.com/Prateek-squadron/ty-migrate/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
   <a href="https://github.com/Prateek-squadron/ty-migrate/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
   <img src="https://img.shields.io/badge/python-3.11%2B-blue.svg" alt="Python 3.11+">
@@ -35,51 +36,59 @@ While `migrate-to-uv` handles Poetry/Pipenv to `uv` and Ruff replaces Flake8/Bla
 ## Quick Start
 
 ```bash
-# Preview migration and audit report
-ty-migrate --dir . --dry-run --diff --report
+# Run directly with uvx (zero install)
+uvx ty-migrate --rewrite-ignores --report --verify
 
-# Write [tool.ty.*] to pyproject.toml (or ty.toml) and rewrite inline ignores
-ty-migrate --dir . --rewrite-ignores --report
+# Or preview changes safely first
+uvx ty-migrate --dir . --rewrite-ignores --dry-run --diff --report
 
-# Run via uvx without installing globally (once published)
-uvx ty-migrate --dir . --rewrite-ignores --verify
+# Or install globally / with pip
+pip install ty-migrate
 ```
 
-## Example
+## Example Output
 
-Before (`mypy.ini` + Python code):
+```console
+$ ty-migrate --rewrite-ignores --dry-run --diff --report
+--- a/ty.toml
++++ b/ty.toml
+@@ -0,0 +1,14 @@
++[environment]
++python-version = "3.12"
++
++[analysis]
++allowed-unresolved-imports = ["vendor_missing.*"]
++
++[rules]
++import-not-found = "ignore"
++redundant-cast = "warn"
++missing-attribute = "ignore"
++
++[[overrides]]
++include = ["tests/**"]
++rules = { invalid-argument-type = "ignore" }
 
-```ini
-[mypy]
-python_version = 3.12
-ignore_missing_imports = True
-warn_redundant_casts = True
-disable_error_code = attr-defined
+--- a/app.py
++++ b/app.py
+@@ -1 +1 @@
+-x: int = "bad"  # type: ignore[assignment]  # legacy fixture
++x: int = "bad"  # ty: ignore[invalid-assignment]  # legacy fixture
+=== ty-migrate Audit Report ===
+Sources: mypy (mypy.ini)
+Summary: 6 translated, 1 guidance/implicit, 0 unmapped
 
-[mypy-tests.*]
-disable_error_code = arg-type
-```
+[Translated]
+  - mypy.ini:python_version -> environment.python-version (3.12)
+  - mypy.ini:ignore_missing_imports=True -> rules.import-not-found=ignore
+  - mypy.ini:warn_redundant_casts=True -> rules.redundant-cast=warn
+  - mypy.ini:error_code:attr-defined -> rules.missing-attribute=ignore
+  - mypy.ini:[mypy-vendor_missing.*] -> analysis.allowed-unresolved-imports (vendor_missing.*)
+  - mypy.ini:[mypy-tests.*]:error_code:arg-type -> rules.invalid-argument-type=ignore
 
-```python
-x: int = "bad"  # type: ignore[assignment]  # legacy fixture
-```
+[Guidance / Implicit in ty]
+  - mypy.ini:strict=True -> (implicit / guidance) (ty has no single `strict` flag (its defaults are already strict); enable extra strict rules like `possibly-missing-attribute` or `unsound-return` in `[tool.ty.rules]` if desired.)
 
-After (`ty-migrate --target pyproject --rewrite-ignores`):
-
-```toml
-[tool.ty.environment]
-python-version = "3.12"
-
-[tool.ty.rules]
-import-not-found = "ignore"
-redundant-cast = "warn"
-missing-attribute = "ignore"
-
-[[tool.ty.overrides]]
-include = ["tests/**"]
-rules = { invalid-argument-type = "ignore" }
-```
-
-```python
-x: int = "bad"  # ty: ignore[invalid-assignment]  # legacy fixture
+[Inline Ignore Comments]
+  - Rewritten: 1
+  - Unchanged: 0
 ```
