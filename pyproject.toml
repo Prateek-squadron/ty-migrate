@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ty-migrate"
+version = "0.1.0"
+description = "Migrate mypy and pyright configurations and inline ignores to Astral's ty"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "ty-migrate contributors"}
+]
+requires-python = ">=3.11"
+keywords = ["ty", "mypy", "pyright", "basedpyright", "astral", "type-checking", "migration"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Software Development :: Quality Assurance",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+ty-migrate = "ty_migrate.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
