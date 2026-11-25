@@ -31,6 +31,11 @@ classifiers = [
 [project.optional-dependencies]
 dev = ["pytest"]
 
+[project.urls]
+Homepage = "https://github.com/Prateek-squadron/ty-migrate"
+Repository = "https://github.com/Prateek-squadron/ty-migrate"
+Issues = "https://github.com/Prateek-squadron/ty-migrate/issues"
+
 [project.scripts]
 ty-migrate = "ty_migrate.cli:main"
 

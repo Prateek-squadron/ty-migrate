@@ -1,6 +1,17 @@
 # ty-migrate
 
-**Automated migration CLI for moving Python projects from `mypy`, `pyright`, and `basedpyright` to Astral's `ty`.**
+<p align="center">
+  <strong>Automated migration CLI for moving Python projects from <code>mypy</code>, <code>pyright</code>, and <code>basedpyright</code> to Astral's <code>ty</code></strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/Prateek-squadron/ty-migrate/actions/workflows/ci.yml"><img src="https://github.com/Prateek-squadron/ty-migrate/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
+  <a href="https://github.com/Prateek-squadron/ty-migrate/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+  <img src="https://img.shields.io/badge/python-3.11%2B-blue.svg" alt="Python 3.11+">
+  <img src="https://img.shields.io/badge/dependencies-zero-brightgreen.svg" alt="Zero Dependencies">
+</p>
+
+---
 
 While `migrate-to-uv` handles Poetry/Pipenv to `uv` and Ruff replaces Flake8/Black/isort, Astral's `ty` has had no automated configuration or inline-suppression migrator—forcing teams to manually rewrite `mypy.ini`, `pyrightconfig.json`, `pyproject.toml`, and hundreds of `# type: ignore[...]` / `# pyright: ignore[...]` comments.
 
