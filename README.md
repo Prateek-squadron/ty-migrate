@@ -35,6 +35,8 @@ While `migrate-to-uv` handles Poetry/Pipenv to `uv` and Ruff replaces Flake8/Bla
 
 ## Quick Start
 
+![ty-migrate before and after](assets/demo-before-after.png)
+
 ```bash
 # Run directly with uvx (zero install)
 uvx ty-migrate --rewrite-ignores --report --verify
@@ -47,6 +49,8 @@ pip install ty-migrate
 ```
 
 ## Example Output
+
+![ty-migrate diff and audit report](assets/demo-audit-report.png)
 
 ```console
 $ ty-migrate --rewrite-ignores --dry-run --diff --report
